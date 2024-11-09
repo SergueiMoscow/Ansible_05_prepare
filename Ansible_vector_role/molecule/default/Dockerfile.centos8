@@ -1,0 +1,8 @@
+FROM quay.io/centos/centos:stream8
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && \
+    dnf install -y sudo python3.12
+CMD ["sleep", "infinity"]
+# docker build -t centos8 - < Dockerfile.centos8
+# docker run -d --name centos8 centos8
+# docker run --name centos8 -it centos8 /bin/bash

@@ -1,0 +1,22 @@
+---
+# defaults file for vector
+vector_config_dir: "/etc/vector"
+vector_config_file: "vector.yml"
+
+vector_config:
+  sources:
+    apache_logs:
+      type: "file"
+      include:
+        - "/var/log/apache2/*.log"
+      ignore_older_secs: 86400
+
+  sinks:
+    es_cluster:
+      inputs:
+        - "apache_logs"
+      type: "elasticsearch"
+      endpoints:
+        - "http://localhost:9200"
+      bulk:
+        index: "vector-%Y-%m-%d"

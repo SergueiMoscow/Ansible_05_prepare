@@ -1,0 +1,4 @@
+vector:
+  hosts:
+    centos8:
+      ansible_connection: docker

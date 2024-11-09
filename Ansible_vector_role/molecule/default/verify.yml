@@ -1,0 +1,57 @@
+---
+# verify.yml
+- name: Verify Vector Role
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Check if Vector is installed
+      ansible.builtin.shell: "rpm -q vector"
+      register: vector_installed
+      ignore_errors: yes
+
+    - name: Assert Vector package is installed
+      ansible.builtin.assert:
+        that:
+          - vector_installed.rc == 0
+        fail_msg: "Vector is not installed."
+        success_msg: "Vector is installed."
+
+    - name: Check if Vector service is enabled
+      ansible.builtin.systemd:
+        name: vector
+        enabled: yes
+      register: vector_service_enabled
+
+    - name: Assert Vector service is enabled
+      ansible.builtin.assert:
+        that:
+          - vector_service_enabled.status.Enabled
+        fail_msg: "Vector service is not enabled."
+        success_msg: "Vector service is enabled."
+
+    - name: Check if Vector service is running
+      ansible.builtin.systemd:
+        name: vector
+        state: started
+      register: vector_service_running
+
+    - name: Assert Vector service is running
+      ansible.builtin.assert:
+        that:
+          - vector_service_running.status.ActiveState == "active"
+        fail_msg: "Vector service is not running."
+        success_msg: "Vector service is running."
+
+    - name: Validate Vector configuration
+      ansible.builtin.shell: "vector validate --config {{ vector_config_dir }}/{{ vector_config_file }}"
+      register: vector_config_valid
+      failed_when: vector_config_valid.rc != 0
+      changed_when: false
+
+    - name: Assert Vector configuration is valid
+      ansible.builtin.assert:
+        that:
+          - vector_config_valid.rc == 0
+        fail_msg: "Vector configuration is not valid."
+        success_msg: "Vector configuration is valid."

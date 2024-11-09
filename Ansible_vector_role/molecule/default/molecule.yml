@@ -1,0 +1,20 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  ansible-lint .
+  yamllint .
+platforms:
+  - name: centos8
+#    image: quay.io/centos/centos:stream8
+    dockerfile: Dockerfile.centos8
+    image: centos8_image
+    pre_build_image: false
+#  - name: fedora
+#    image: docker.io/pycontribs/fedora:latest
+#    pre_build_image: true
+#  - name: ubuntu
+#    image: docker.io/pycontribs/ubuntu:latest
+#    pre_build_image: true

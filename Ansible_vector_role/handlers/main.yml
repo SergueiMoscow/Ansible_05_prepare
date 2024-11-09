@@ -1,0 +1,7 @@
+---
+# handlers file for vector
+- name: Start vector service
+  become: true
+  ansible.builtin.service:
+    name: vector
+    state: restarted
