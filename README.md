@@ -30,6 +30,7 @@ vector 0.42.0 (x86_64-unknown-linux-gnu 3d16e34 2024-10-21 14:10:14.375255220)
 `exit`  
 #### Удалить контейнер
 `docker stop centos8 && docker rm centos8`
+
 ---
 
 *Убедились, что в контейнере vector установлен*
