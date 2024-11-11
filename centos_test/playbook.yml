@@ -3,16 +3,5 @@
   become: true
   hosts: all
   tasks:
-    - name: Download repo
-      become: true
-    # doc: https://vector.dev/docs/setup/installation/package-managers/yum/
-      ansible.builtin.shell: |
-        curl --proto '=https' --tlsv1.2 -sSfL https://sh.vector.dev | bash -s -- -y --prefix /usr/local
-      args:
-        chdir: /root/
-        creates: "/usr/local/bin/vector"
-
-    - name: Ensure vector executable is available
-      stat:
-        path: "/usr/local/bin/vector"
-      register: vector_stat
+    - name: Include Vector tasks
+      include_tasks: ../vector_tasks.yml

@@ -1,0 +1,23 @@
+# vector_tasks.yml
+---
+- name: Download vector installation script (for test)
+  become: true
+  ansible.builtin.get_url:
+    url: https://sh.vector.dev
+    dest: /root/install_vector.sh
+    mode: '0755'
+
+- name: Download and install repo
+  become: true
+# doc: https://vector.dev/docs/setup/installation/package-managers/yum/
+  ansible.builtin.shell: |
+    curl --proto '=https' --tlsv1.2 -sSfL https://sh.vector.dev | bash -s -- -y --prefix /usr/local
+  args:
+    chdir: /root/
+    creates: "/usr/local/bin/vector"
+
+- name: Ensure vector executable is available
+  stat:
+    path: "/usr/local/bin/vector"
+  register: vector_stat
+
